@@ -77,7 +77,7 @@ impl log::Log for LogCrateProxy {
     fn log(&self, record: &log::Record) {
         let logger = self.logger();
         let record = Record::from_log_crate_record(&logger, record, SystemTime::now());
-        logger.log(&record)
+        Logger::log(&logger, &record);
     }
 
     fn flush(&self) {
