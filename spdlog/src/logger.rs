@@ -687,6 +687,22 @@ impl LoggerBuilder {
     }
 }
 
+#[cfg(feature = "log")]
+impl log::Log for Logger {
+    fn enabled(&self, metadata: &log::Metadata) -> bool {
+        self.should_log(metadata.level().into())
+    }
+
+    fn log(&self, record: &log::Record) {
+        let record = Record::from_log_crate_record(self, record, std::time::SystemTime::now());
+        self.log(&record)
+    }
+
+    fn flush(&self) {
+        self.flush()
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use std::{thread, time::Duration};
